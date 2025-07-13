@@ -30,7 +30,7 @@ const HomePage = () => {
 
   const handleUpdate = async (updatedProduct) => {
     const { success, message } = await updateProduct(
-      selectedProduct.id || selectedProduct._id,
+      selectedProduct._id,
       updatedProduct
     );
     if (success) {
