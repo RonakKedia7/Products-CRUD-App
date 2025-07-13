@@ -73,7 +73,7 @@ const ProductCard = ({ product, setShowUpdateModel, setSelectedProduct }) => {
             <FaEdit className="size-7" />
           </button>
           <button
-            onClick={() => handleDeleteProduct(product._id)}
+            onClick={() => handleDeleteProduct(product.id || product._id)}
             className="text-red-500 hover:text-red-400 transition-colors duration-200 transform hover:scale-110"
           >
             <MdDelete className="size-7" />

@@ -40,7 +40,7 @@ export const useProductStore = create((set) => ({
     try {
       const res = await axios.delete(`/api/products/${pid}`);
       set((state) => ({
-        products: state.products.filter((product) => product._id !== pid),
+        products: state.products.filter((product) => (product.id || product._id) !== pid),
       }));
       return { success: true, message: res.data.message };
     } catch (error) {
@@ -59,7 +59,7 @@ export const useProductStore = create((set) => ({
       const res = await axios.put(`/api/products/${pid}`, updatedProduct);
       set((state) => ({
         products: state.products.map((product) =>
-          product._id === pid ? res.data.data : product
+          (product.id || product._id) === pid ? res.data.data : product
         ),
       }));
       return {
