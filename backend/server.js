@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
 import productRoutes from "./routes/product.route.js";
-import { path } from "path";
+import path from "path";
 
 // Configure dotenv before other imports that might use env variables
 dotenv.config();
