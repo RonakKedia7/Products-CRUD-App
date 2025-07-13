@@ -36,32 +36,36 @@ const HomePage = () => {
     if (success) {
       toast.success(message, {
         style: {
-          background: "#1e293b",
+          background: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
           color: "#ffffff",
-          border: "1px solid #2dd4bf",
-          borderRadius: "12px",
-          padding: "12px 24px",
+          border: "1px solid #14b8a6",
+          borderRadius: "16px",
+          padding: "16px 24px",
           fontSize: "16px",
-          fontWeight: "500",
+          fontWeight: "600",
+          boxShadow:
+            "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
         },
         iconTheme: {
-          primary: "#2dd4bf",
+          primary: "#14b8a6",
           secondary: "#ffffff",
         },
       });
     } else {
       toast.error(message, {
         style: {
-          background: "#1e293b",
+          background: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
           color: "#ffffff",
-          border: "1px solid #f87171",
-          borderRadius: "12px",
-          padding: "12px 24px",
+          border: "1px solid #ef4444",
+          borderRadius: "16px",
+          padding: "16px 24px",
           fontSize: "16px",
-          fontWeight: "500",
+          fontWeight: "600",
+          boxShadow:
+            "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
         },
         iconTheme: {
-          primary: "#f87171",
+          primary: "#ef4444",
           secondary: "#ffffff",
         },
       });
@@ -69,25 +73,44 @@ const HomePage = () => {
   };
 
   return (
-    <div className="py-10 mt-24 px-6 lg:px-24">
-      <div className="text-white mx-auto">
-        <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight uppercase mb-10 text-center">
-          Current Products
-        </h1>
+    <div className="min-h-screen pt-24 pb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header Section */}
+        <div className="text-center mb-12">
+          <div className="relative inline-block">
+            <div className="absolute inset-0 bg-gradient-to-r from-teal-400 to-cyan-400 blur-2xl opacity-20"></div>
+            <h1 className="relative text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent mb-4">
+              Product Collection
+            </h1>
+          </div>
+          <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            Discover and manage your premium product inventory with style
+          </p>
+        </div>
 
+        {/* Loading State */}
         {loading && (
-          <div className="flex flex-col min-h-[300px] items-center justify-center bg-slate-900 border border-slate-800 rounded-xl p-8 sm:p-10">
-            <div className="flex items-center gap-4 mb-6">
-              <span className="text-2xl sm:text-3xl font-semibold text-teal-300">
-                Loading...
-              </span>
+          <div className="flex flex-col items-center justify-center min-h-[400px]">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-teal-400 to-cyan-400 rounded-3xl blur-xl opacity-20"></div>
+              <div className="relative bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-12 text-center">
+                <div className="flex items-center justify-center gap-4 mb-6">
+                  <AiOutlineLoading3Quarters className="text-teal-400 text-4xl animate-spin" />
+                  <span className="text-2xl sm:text-3xl font-semibold bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
+                    Loading Products...
+                  </span>
+                </div>
+                <div className="w-64 h-2 bg-gray-700 rounded-full overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full animate-pulse"></div>
+                </div>
+              </div>
             </div>
-            <AiOutlineLoading3Quarters className="text-teal-400 size-9 sm:size-10 animate-spin" />
           </div>
         )}
 
+        {/* Products Grid */}
         {!loading && products.length !== 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 bg-slate-900 border border-slate-800 rounded-xl p-8 sm:p-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
             {products.map((product) => (
               <ProductCard
                 key={product._id || product._id}
@@ -99,22 +122,44 @@ const HomePage = () => {
           </div>
         )}
 
+        {/* Empty State */}
         {!loading && products.length === 0 && (
-          <div className="flex flex-col min-h-[300px] items-center justify-center bg-slate-900 border border-slate-800 rounded-xl p-8 sm:p-10">
-            <div className="flex items-center gap-4 mb-6">
-              <span className="text-2xl sm:text-3xl font-semibold text-teal-300">
-                No Products Found...
-              </span>
-              <TbShoppingCartX className="text-teal-400 size-9 sm:size-10" />
+          <div className="flex flex-col items-center justify-center min-h-[400px]">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-teal-400 to-cyan-400 rounded-3xl blur-xl opacity-20"></div>
+              <div className="relative bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-12 text-center max-w-md">
+                <div className="mb-8">
+                  <div className="relative inline-block">
+                    <div className="absolute inset-0 bg-gradient-to-r from-teal-400 to-cyan-400 rounded-full blur opacity-50"></div>
+                    <div className="relative bg-gradient-to-r from-teal-500 to-cyan-500 p-6 rounded-full">
+                      <TbShoppingCartX className="text-white text-4xl" />
+                    </div>
+                  </div>
+                </div>
+
+                <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-4">
+                  No Products Found
+                </h3>
+                <p className="text-gray-400 mb-8 leading-relaxed">
+                  Start building your product collection by adding your first
+                  item
+                </p>
+
+                <Link to={"/create"}>
+                  <button className="relative group overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-xl blur opacity-75 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="relative px-8 py-4 bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-500 hover:to-cyan-500 text-white font-semibold text-lg rounded-xl transition-all duration-300 ease-in-out transform group-hover:scale-105 border border-teal-500/20">
+                      Create Your First Product
+                    </div>
+                  </button>
+                </Link>
+              </div>
             </div>
-            <Link to={"/create"}>
-              <button className="text-white cursor-pointer font-semibold text-lg px-6 py-3 rounded-xl hover:border hover:border-teal-500">
-                Create a Product
-              </button>
-            </Link>
           </div>
         )}
       </div>
+
+      {/* Update Modal */}
       {showUpdateModel && selectedProduct && (
         <UpdateProductModal
           isOpen={showUpdateModel}
