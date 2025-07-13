@@ -109,7 +109,7 @@ const HomePage = () => {
         )}
 
         {/* Products Grid */}
-        {!loading && products.length !== 0 && (
+        {!loading && products?.length !== 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
             {products.map((product) => (
               <ProductCard
@@ -123,7 +123,7 @@ const HomePage = () => {
         )}
 
         {/* Empty State */}
-        {!loading && products.length === 0 && (
+        {!loading && products?.length === 0 && (
           <div className="flex flex-col items-center justify-center min-h-[400px]">
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-teal-400 to-cyan-400 rounded-3xl blur-xl opacity-20"></div>
