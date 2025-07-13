@@ -42,7 +42,9 @@ const HomePage = () => {
           borderRadius: "16px",
           padding: "16px 24px",
           fontSize: "16px",
-          fontWeight: "500",
+          fontWeight: "600",
+          boxShadow:
+            "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
         },
         iconTheme: {
           primary: "#14b8a6",
@@ -58,7 +60,9 @@ const HomePage = () => {
           borderRadius: "16px",
           padding: "16px 24px",
           fontSize: "16px",
-          fontWeight: "500",
+          fontWeight: "600",
+          boxShadow:
+            "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
         },
         iconTheme: {
           primary: "#ef4444",
@@ -120,18 +124,37 @@ const HomePage = () => {
 
         {/* Empty State */}
         {!loading && products.length === 0 && (
-          <div className="flex flex-col min-h-[300px] items-center justify-center bg-slate-900 border border-slate-800 rounded-xl p-8 sm:p-10">
-            <div className="flex items-center gap-4 mb-6">
-              <span className="text-2xl sm:text-3xl font-semibold text-teal-300">
-                No Products Found...
-              </span>
-              <TbShoppingCartX className="text-teal-400 size-9 sm:size-10" />
+          <div className="flex flex-col items-center justify-center min-h-[400px]">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-teal-400 to-cyan-400 rounded-3xl blur-xl opacity-20"></div>
+              <div className="relative bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-12 text-center max-w-md">
+                <div className="mb-8">
+                  <div className="relative inline-block">
+                    <div className="absolute inset-0 bg-gradient-to-r from-teal-400 to-cyan-400 rounded-full blur opacity-50"></div>
+                    <div className="relative bg-gradient-to-r from-teal-500 to-cyan-500 p-6 rounded-full">
+                      <TbShoppingCartX className="text-white text-4xl" />
+                    </div>
+                  </div>
+                </div>
+
+                <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-4">
+                  No Products Found
+                </h3>
+                <p className="text-gray-400 mb-8 leading-relaxed">
+                  Start building your product collection by adding your first
+                  item
+                </p>
+
+                <Link to={"/create"}>
+                  <button className="relative group overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-xl blur opacity-75 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="relative px-8 py-4 bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-500 hover:to-cyan-500 text-white font-semibold text-lg rounded-xl transition-all duration-300 ease-in-out transform group-hover:scale-105 border border-teal-500/20">
+                      Create Your First Product
+                    </div>
+                  </button>
+                </Link>
+              </div>
             </div>
-            <Link to={"/create"}>
-              <button className="text-white cursor-pointer font-semibold text-lg px-6 py-3 rounded-xl hover:border hover:border-teal-500">
-                Create a Product
-              </button>
-            </Link>
           </div>
         )}
       </div>

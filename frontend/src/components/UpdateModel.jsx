@@ -26,20 +26,32 @@ const UpdateProductModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-gray-950 bg-opacity-70 flex items-center justify-center z-50">
-      <div className="bg-slate-900/70 rounded-3xl shadow-2xl p-8 w-full max-w-lg relative border border-gray-800">
-        {/* Cancel Icon */}
-        <button
-          className="absolute top-4 right-4 text-teal-400 hover:text-teal-300 transition-colors duration-200"
-          onClick={onClose}
-        >
-          <IoClose className="size-7" />
-        </button>
+    <div className="fixed inset-0 bg-gray-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="relative w-full max-w-2xl">
+        {/* Glow effect */}
+        <div className="absolute inset-0 bg-gradient-to-r from-teal-400 to-cyan-400 rounded-3xl blur-xl opacity-20"></div>
 
-        {/* Modal Title */}
-        <h2 className="text-2xl font-bold text-white uppercase tracking-tight mb-6">
-          Update Product
-        </h2>
+        {/* Modal */}
+        <div className="relative bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-gray-700/50 overflow-hidden">
+          {/* Header */}
+          <div className="relative p-6 border-b border-gray-700/50">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                  Update Product
+                </h2>
+                <p className="text-gray-400 mt-1">
+                  Modify your product details
+                </p>
+              </div>
+              <button
+                className="p-2 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-xl transition-all duration-200"
+                onClick={onClose}
+              >
+                <IoClose className="text-2xl" />
+              </button>
+            </div>
+          </div>
 
           {/* Form */}
           <div className="p-6 space-y-6">
@@ -115,13 +127,45 @@ const UpdateProductModal = ({
               </div>
             </div>
 
-        {/* Update Button */}
-        <button
-          className="mt-8 w-full bg-teal-600 text-white font-semibold text-lg px-6 py-3 rounded-xl border border-teal-500 hover:bg-teal-700 hover:border-teal-400 transition-all duration-300 ease-in-out transform hover:scale-105"
-          onClick={handleUpdate}
-        >
-          Update Product
-        </button>
+            {/* Image Preview */}
+            {form.image && (
+              <div className="space-y-3">
+                <label className="block text-lg font-semibold bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
+                  Image Preview
+                </label>
+                <div className="relative rounded-xl overflow-hidden border border-gray-600/50 max-w-md">
+                  <img
+                    src={form.image}
+                    alt="Product preview"
+                    className="w-full h-48 object-cover"
+                    onError={(e) => {
+                      e.target.style.display = "none";
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Footer */}
+          <div className="p-6 border-t border-gray-700/50 flex gap-4">
+            <button
+              onClick={onClose}
+              className="flex-1 px-6 py-3 bg-gray-700/50 hover:bg-gray-600/50 text-white font-semibold rounded-xl transition-all duration-300 border border-gray-600/50"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleUpdate}
+              className="relative flex-1 group overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-xl blur opacity-75 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="relative px-6 py-3 bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-500 hover:to-cyan-500 text-white font-semibold rounded-xl transition-all duration-300 ease-in-out transform group-hover:scale-[1.02] border border-teal-500/20">
+                Update Product
+              </div>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -4,18 +4,26 @@ import { CiSquarePlus } from "react-icons/ci";
 
 const Navbar = () => {
   return (
-    <div className=" text-white py-5 px-6 sm:px-12 md:px-24">
-      <div className="bg-slate-900 p-3 border border-slate-800  rounded-xl flex flex-col sm:flex-row items-center justify-between gap-6">
-        {/* Logo and Title */}
-        <Link
-          to={"/"}
-          className="flex items-center gap-3 text-2xl sm:text-3xl font-extrabold tracking-tight uppercase"
-        >
-          <FaShoppingCart className="text-teal-400" />
-          <span className="text-white hover:text-gray-300 transition-colors duration-200">
-            Product Store
-          </span>
-        </Link>
+    <div className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-gray-950/80 border-b border-gray-800/50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-20">
+          {/* Logo and Title */}
+          <Link to={"/"} className="flex items-center gap-3 group">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-teal-400 to-cyan-400 rounded-xl blur opacity-75 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="relative bg-gradient-to-r from-teal-500 to-cyan-500 p-3 rounded-xl">
+                <FaShoppingCart className="text-white text-xl" />
+              </div>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent group-hover:from-teal-400 group-hover:to-cyan-400 transition-all duration-300">
+                Product Store
+              </span>
+              <span className="text-xs text-gray-400 font-medium tracking-wider uppercase">
+                Management System
+              </span>
+            </div>
+          </Link>
 
           {/* Add Product Button */}
           <Link to={"/create"}>
