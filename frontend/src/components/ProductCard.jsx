@@ -1,121 +1,116 @@
-import { FaEdit } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
+import { Edit2, Trash2, DollarSign } from "lucide-react";
 import { useProductStore } from "../store/product.js";
 import { toast } from "react-hot-toast";
+import { useState } from "react";
 
 const ProductCard = ({ product, setShowUpdateModel, setSelectedProduct }) => {
   const { deleteProduct } = useProductStore();
+  const [imageError, setImageError] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDeleteProduct = async (pid) => {
-    const { success, message } = await deleteProduct(pid);
-    if (success) {
-      toast.success(message, {
-        style: {
-          background: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
-          color: "#ffffff",
-          border: "1px solid #14b8a6",
-          borderRadius: "16px",
-          padding: "16px 24px",
-          fontSize: "16px",
-          fontWeight: "600",
-          boxShadow:
-            "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-        },
-        iconTheme: {
-          primary: "#14b8a6",
-          secondary: "#ffffff",
-        },
-      });
-    } else {
-      toast.error(message, {
-        style: {
-          background: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
-          color: "#ffffff",
-          border: "1px solid #ef4444",
-          borderRadius: "16px",
-          padding: "16px 24px",
-          fontSize: "16px",
-          fontWeight: "600",
-          boxShadow:
-            "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-        },
-        iconTheme: {
-          primary: "#ef4444",
-          secondary: "#ffffff",
-        },
-      });
+    if (!window.confirm("Are you sure you want to delete this product?")) {
+      return;
+    }
+
+    setIsDeleting(true);
+    try {
+      const { success, message } = await deleteProduct(pid);
+      if (success) {
+        toast.success(message || "Product deleted successfully");
+      } else {
+        toast.error(message || "Failed to delete product");
+      }
+    } catch (error) {
+      toast.error("An error occurred while deleting the product");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
-  return (
-    <div className="group relative">
-      {/* Glow effect */}
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-3xl blur opacity-0 group-hover:opacity-75 transition-opacity duration-500"></div>
+  const handleImageError = () => {
+    setImageError(true);
+  };
 
-      {/* Card */}
-      <div className="relative bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-gray-700/50 hover:border-teal-500/50 transition-all duration-500 transform group-hover:scale-[1.02]">
-        {/* Image Container */}
-        <div className="relative w-full h-64 sm:h-72 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent z-10"></div>
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden card-hover">
+      {/* Image Section */}
+      <div className="relative h-48 bg-gray-50">
+        {!imageError ? (
           <img
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            className="w-full h-full object-cover"
+            onError={handleImageError}
           />
+        ) : (
+          <div className="image-placeholder h-full">
+            <Package className="h-12 w-12" />
+          </div>
+        )}
+        
+        {/* Action Buttons */}
+        <div className="absolute top-3 right-3 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button
+            onClick={() => {
+              setShowUpdateModel(true);
+              setSelectedProduct(product);
+            }}
+            className="p-2 bg-white rounded-lg shadow-md hover:bg-gray-50 transition-colors"
+            title="Edit product"
+          >
+            <Edit2 className="h-4 w-4 text-gray-600" />
+          </button>
+          <button
+            onClick={() => handleDeleteProduct(product._id)}
+            disabled={isDeleting}
+            className="p-2 bg-white rounded-lg shadow-md hover:bg-red-50 transition-colors disabled:opacity-50"
+            title="Delete product"
+          >
+            <Trash2 className={`h-4 w-4 ${isDeleting ? 'text-gray-400' : 'text-red-600'}`} />
+          </button>
+        </div>
+      </div>
 
-          {/* Action buttons overlay */}
-          <div className="absolute top-4 right-4 z-20 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-            <button
-              onClick={() => {
-                setShowUpdateModel(true);
-                setSelectedProduct(product);
-              }}
-              className="p-3 bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-400 hover:to-cyan-400 text-white rounded-xl shadow-lg backdrop-blur-sm transition-all duration-300 transform hover:scale-110"
-            >
-              <FaEdit className="text-lg" />
-            </button>
-            <button
-              onClick={() => handleDeleteProduct(product._id)}
-              className="p-3 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-400 hover:to-pink-400 text-white rounded-xl shadow-lg backdrop-blur-sm transition-all duration-300 transform hover:scale-110"
-            >
-              <MdDelete className="text-lg" />
-            </button>
+      {/* Content Section */}
+      <div className="p-4">
+        <div className="flex justify-between items-start mb-3">
+          <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 flex-1 mr-2">
+            {product.name}
+          </h3>
+          <div className="flex items-center text-green-600 font-semibold">
+            <DollarSign className="h-4 w-4" />
+            <span className="text-lg">{parseFloat(product.price).toFixed(2)}</span>
           </div>
         </div>
 
-        {/* Content */}
-        <div className="p-6 space-y-4">
-          <div className="flex justify-between items-start">
-            <h1 className="text-xl sm:text-2xl font-bold text-white group-hover:text-teal-300 transition-colors duration-300 line-clamp-2">
-              {product.name}
-            </h1>
-            <div className="flex flex-col items-end">
-              <span className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
-                ${product.price}
-              </span>
-              <span className="text-xs text-gray-400 font-medium">USD</span>
-            </div>
-          </div>
+        {/* Mobile Action Buttons */}
+        <div className="flex space-x-2 sm:hidden">
+          <button
+            onClick={() => {
+              setShowUpdateModel(true);
+              setSelectedProduct(product);
+            }}
+            className="flex-1 flex items-center justify-center space-x-2 py-2 px-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <Edit2 className="h-4 w-4" />
+            <span>Edit</span>
+          </button>
+          <button
+            onClick={() => handleDeleteProduct(product._id)}
+            disabled={isDeleting}
+            className="flex-1 flex items-center justify-center space-x-2 py-2 px-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+          >
+            <Trash2 className="h-4 w-4" />
+            <span>{isDeleting ? 'Deleting...' : 'Delete'}</span>
+          </button>
+        </div>
 
-          {/* Mobile action buttons */}
-          <div className="flex justify-center gap-4 sm:hidden">
-            <button
-              onClick={() => {
-                setShowUpdateModel(true);
-                setSelectedProduct(product);
-              }}
-              className="flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-500 hover:to-cyan-500 text-white font-semibold rounded-xl transition-all duration-300"
-            >
-              <FaEdit className="text-lg" />
-              <span>Edit</span>
-            </button>
-            <button
-              onClick={() => handleDeleteProduct(product._id)}
-              className="flex-1 flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-500 hover:to-pink-500 text-white font-semibold rounded-xl transition-all duration-300"
-            >
-              <MdDelete className="text-lg" />
-              <span>Delete</span>
-            </button>
+        {/* Product Info */}
+        <div className="mt-3 pt-3 border-t border-gray-100">
+          <div className="flex justify-between text-sm text-gray-500">
+            <span>Product ID</span>
+            <span className="font-mono">{product._id?.slice(-8)}</span>
           </div>
         </div>
       </div>
