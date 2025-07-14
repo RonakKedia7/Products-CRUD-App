@@ -2,6 +2,7 @@ import { Edit2, Trash2, DollarSign } from "lucide-react";
 import { useProductStore } from "../store/product.js";
 import { toast } from "react-hot-toast";
 import { useState } from "react";
+import { Package } from "lucide-react";
 
 const ProductCard = ({ product, setShowUpdateModel, setSelectedProduct }) => {
   const { deleteProduct } = useProductStore();

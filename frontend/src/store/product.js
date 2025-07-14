@@ -2,7 +2,9 @@ import { create } from "zustand";
 import axios from "axios";
 
 // Configure axios defaults
-axios.defaults.baseURL = import.meta.env.VITE_API_URL || '';
+axios.defaults.baseURL = import.meta.env.PROD 
+  ? 'https://your-backend-url.com' // This will be updated after backend deployment
+  : '/api';
 axios.defaults.timeout = 10000;
 
 // Add request interceptor for debugging
