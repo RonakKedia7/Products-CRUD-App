@@ -17,7 +17,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:5000",
+        target: "https://products-crud-app-backend-ywa6.onrender.com",
         changeOrigin: true,
         secure: false,
       },

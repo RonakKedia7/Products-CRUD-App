@@ -3,7 +3,7 @@ import axios from "axios";
 
 // Configure axios defaults
 axios.defaults.baseURL = import.meta.env.PROD 
-  ? 'https://your-backend-url.com' // This will be updated after backend deployment
+  ? 'https://products-crud-app-backend-ywa6.onrender.com'
   : '/api';
 axios.defaults.timeout = 10000;
 
