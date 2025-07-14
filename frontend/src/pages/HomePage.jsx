@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Package, Plus, AlertCircle, Loader2 } from "lucide-react";
+import { Package, Plus, AlertCircle, Loader2, Search, Filter } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useProductStore } from "../store/product.js";
 import ProductCard from "../components/ProductCard.jsx";
@@ -12,6 +12,7 @@ const HomePage = () => {
   const [error, setError] = useState(null);
   const [showUpdateModel, setShowUpdateModel] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -67,56 +68,88 @@ const HomePage = () => {
     loadProducts();
   };
 
+  // Filter products based on search term
+  const filteredProducts = products?.filter(product =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  ) || [];
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Product Inventory</h1>
-              <p className="text-gray-600 mt-1">
-                Manage your product catalog efficiently
+              <h1 className="text-4xl font-bold text-gray-900 mb-2">Product Inventory</h1>
+              <p className="text-lg text-gray-600">
+                Manage your product catalog efficiently and professionally
               </p>
             </div>
-            <div className="flex items-center space-x-4">
+            
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
               {!loading && !error && (
-                <div className="text-sm text-gray-500">
-                  {products?.length || 0} products
+                <div className="flex items-center space-x-2 text-sm text-gray-500 bg-white px-4 py-2 rounded-xl border border-gray-200">
+                  <Package className="h-4 w-4" />
+                  <span className="font-medium">
+                    {filteredProducts.length} of {products?.length || 0} products
+                  </span>
                 </div>
               )}
+              
               <Link
                 to="/create"
-                className="inline-flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors btn-primary"
+                className="inline-flex items-center justify-center space-x-2 bg-gray-900 text-white px-6 py-3 rounded-xl hover:bg-gray-800 transition-colors duration-200 font-medium shadow-sm"
               >
-                <Plus className="h-4 w-4" />
+                <Plus className="h-5 w-5" />
                 <span>Add Product</span>
               </Link>
             </div>
           </div>
+
+          {/* Search Bar */}
+          {!loading && !error && products?.length > 0 && (
+            <div className="mt-6">
+              <div className="relative max-w-md">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all duration-200 bg-white"
+                />
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Loading State */}
         {loading && (
-          <div className="flex flex-col items-center justify-center py-16">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center max-w-md">
-              <Loader2 className="h-8 w-8 text-blue-600 animate-spin mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Loading Products</h3>
-              <p className="text-gray-500">Please wait while we fetch your products...</p>
+          <div className="flex flex-col items-center justify-center py-20">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center max-w-md mx-auto">
+              <div className="relative mb-6">
+                <div className="w-16 h-16 bg-gray-100 rounded-2xl mx-auto flex items-center justify-center">
+                  <Loader2 className="h-8 w-8 text-gray-600 animate-spin" />
+                </div>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Loading Products</h3>
+              <p className="text-gray-600">Please wait while we fetch your product catalog...</p>
             </div>
           </div>
         )}
 
         {/* Error State */}
         {error && !loading && (
-          <div className="flex flex-col items-center justify-center py-16">
-            <div className="bg-white rounded-xl shadow-sm border border-red-200 p-8 text-center max-w-md">
-              <AlertCircle className="h-8 w-8 text-red-600 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Error Loading Products</h3>
-              <p className="text-gray-500 mb-4">{error}</p>
+          <div className="flex flex-col items-center justify-center py-20">
+            <div className="bg-white rounded-2xl shadow-sm border border-red-100 p-12 text-center max-w-md mx-auto">
+              <div className="w-16 h-16 bg-red-50 rounded-2xl mx-auto flex items-center justify-center mb-6">
+                <AlertCircle className="h-8 w-8 text-red-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Error Loading Products</h3>
+              <p className="text-gray-600 mb-6">{error}</p>
               <button
                 onClick={handleRetry}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors btn-primary"
+                className="bg-gray-900 text-white px-6 py-3 rounded-xl hover:bg-gray-800 transition-colors duration-200 font-medium"
               >
                 Try Again
               </button>
@@ -125,9 +158,9 @@ const HomePage = () => {
         )}
 
         {/* Products Grid */}
-        {!loading && !error && products?.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {products.map((product) => (
+        {!loading && !error && filteredProducts.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {filteredProducts.map((product) => (
               <ProductCard
                 key={product._id}
                 product={product}
@@ -138,22 +171,43 @@ const HomePage = () => {
           </div>
         )}
 
+        {/* No Results State */}
+        {!loading && !error && products?.length > 0 && filteredProducts.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-20">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center max-w-md mx-auto">
+              <div className="w-16 h-16 bg-gray-100 rounded-2xl mx-auto flex items-center justify-center mb-6">
+                <Search className="h-8 w-8 text-gray-400" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">No Products Found</h3>
+              <p className="text-gray-600 mb-6">
+                No products match your search criteria. Try adjusting your search terms.
+              </p>
+              <button
+                onClick={() => setSearchTerm("")}
+                className="bg-gray-900 text-white px-6 py-3 rounded-xl hover:bg-gray-800 transition-colors duration-200 font-medium"
+              >
+                Clear Search
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Empty State */}
         {!loading && !error && products?.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-16">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center max-w-md">
-              <div className="bg-gray-100 rounded-full p-4 w-16 h-16 mx-auto mb-4">
-                <Package className="h-8 w-8 text-gray-600" />
+          <div className="flex flex-col items-center justify-center py-20">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center max-w-md mx-auto">
+              <div className="w-20 h-20 bg-gray-100 rounded-2xl mx-auto flex items-center justify-center mb-6">
+                <Package className="h-10 w-10 text-gray-400" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No Products Found</h3>
-              <p className="text-gray-500 mb-6">
-                Get started by adding your first product to the inventory.
+              <h3 className="text-2xl font-semibold text-gray-900 mb-3">No Products Yet</h3>
+              <p className="text-gray-600 mb-8">
+                Get started by adding your first product to the inventory. Build your catalog and manage your products efficiently.
               </p>
               <Link
                 to="/create"
-                className="inline-flex items-center space-x-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors btn-primary"
+                className="inline-flex items-center space-x-2 bg-gray-900 text-white px-8 py-4 rounded-xl hover:bg-gray-800 transition-colors duration-200 font-medium shadow-sm"
               >
-                <Plus className="h-4 w-4" />
+                <Plus className="h-5 w-5" />
                 <span>Add Your First Product</span>
               </Link>
             </div>
