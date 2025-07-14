@@ -1,6 +1,34 @@
 import { create } from "zustand";
 import axios from "axios";
 
+// Configure axios defaults
+axios.defaults.baseURL = import.meta.env.VITE_API_URL || '';
+axios.defaults.timeout = 10000;
+
+// Add request interceptor for debugging
+axios.interceptors.request.use(
+  (config) => {
+    console.log('Making API request:', config.method?.toUpperCase(), config.url);
+    return config;
+  },
+  (error) => {
+    console.error('Request error:', error);
+    return Promise.reject(error);
+  }
+);
+
+// Add response interceptor for error handling
+axios.interceptors.response.use(
+  (response) => {
+    console.log('API response:', response.status, response.config.url);
+    return response;
+  },
+  (error) => {
+    console.error('API error:', error.response?.status, error.response?.data || error.message);
+    return Promise.reject(error);
+  }
+);
+
 export const useProductStore = create((set) => ({
   products: [],
 
@@ -21,7 +49,8 @@ export const useProductStore = create((set) => ({
       return { success: true, message: "Product created successfully." };
     } catch (error) {
       console.error("Create product error:", error);
-      return { success: false, message: "Failed to create product." };
+      const message = error.response?.data?.message || error.message || "Failed to create product.";
+      return { success: false, message };
     }
   },
 
@@ -32,7 +61,8 @@ export const useProductStore = create((set) => ({
       return { success: true };
     } catch (error) {
       console.error("Fetch products error:", error);
-      return { success: false, message: "Failed to fetch products." };
+      const message = error.response?.data?.message || error.message || "Failed to fetch products.";
+      return { success: false, message };
     }
   },
 
@@ -45,7 +75,8 @@ export const useProductStore = create((set) => ({
       return { success: true, message: res.data.message };
     } catch (error) {
       console.error("Delete product error:", error);
-      return { success: false, message: "Failed to delete product." };
+      const message = error.response?.data?.message || error.message || "Failed to delete product.";
+      return { success: false, message };
     }
   },
 
@@ -68,7 +99,8 @@ export const useProductStore = create((set) => ({
       };
     } catch (error) {
       console.error("Update product error:", error);
-      return { success: false, message: "Failed to update product." };
+      const message = error.response?.data?.message || error.message || "Failed to update product.";
+      return { success: false, message };
     }
   },
 }));
